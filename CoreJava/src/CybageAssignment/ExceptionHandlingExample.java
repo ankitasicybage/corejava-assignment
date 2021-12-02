@@ -1,6 +1,7 @@
 package CybageAssignment;
 
-
+import java.lang.reflect.Array;
+import java.util.List;
 
 public class ExceptionHandlingExample {
 
@@ -17,7 +18,7 @@ public class ExceptionHandlingExample {
 		try {
 			
 			String a = "Hello"; 
-            char c = a.charAt(6); 
+            char c = a.charAt(6); //StringIndexOutOfBoundsException
             System.out.println(c);
 		}
 		
@@ -25,8 +26,17 @@ public class ExceptionHandlingExample {
             System.out.println("StringIndexOutOfBoundsException"); }
 		
 		
-		  
+		try {
+			String s = null;
+			String substring = s.substring(0, 2); //NullPointerException. There is no 'NullReferenceException' in Java. 
+												//Java has an equivalent class 'NullPointerException'.
+		}
+		catch(NullPointerException e) {
+            System.out.println("NullPointerException");
+		} 
 
+	
+		
 	}
 
 }
