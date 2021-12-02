@@ -1,7 +1,14 @@
 package CybageAssignment;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -10,29 +17,54 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class ReadExcelFileExample {
 	public static void main(String[] args) {
 		try {
-			File file = new File("C:\\MyData\\MyWorkspace\\CoreJava\\src\\CybageAssignment\\CoreJava.xlsx"); // creating a new file instance
-			FileInputStream fis = new FileInputStream(file); // obtaining bytes from the file
-//creating Workbook instance that refers to .xlsx file  
+			File file = new File("C:\\MyData\\MyWorkspace\\CoreJava\\src\\CybageAssignment\\ReadExcel.xlsx"); 
+			FileInputStream fis = new FileInputStream(file); 
+			Hashtable<Integer,  List<HashMap<String,String>>> ht1 = new Hashtable<>();
+			
+			ArrayList<String> columnNames = new ArrayList<String>();
+			
 			XSSFWorkbook wb = new XSSFWorkbook(fis);
-			XSSFSheet sheet = wb.getSheetAt(0); // creating a Sheet object to retrieve object
-			Iterator<Row> itr = sheet.iterator(); // iterating over excel file
+			XSSFSheet sheet = wb.getSheetAt(0); 
+			Iterator<Row> itr = sheet.iterator();
+			int index = 0;
+			
 			while (itr.hasNext()) {
+				List<HashMap<String,String>> myMap = new ArrayList<HashMap<String,String>>();
 				Row row = itr.next();
-				Iterator<Cell> cellIterator = row.cellIterator(); // iterating over each column
+				Iterator<Cell> cellIterator = row.cellIterator();
+				int cell_index = 0;
+				HashMap<String,String> column_value_map = new HashMap<String, String>();
 				while (cellIterator.hasNext()) {
+					
 					Cell cell = cellIterator.next();
 					switch (cell.getCellType()) {
-					case Cell.CELL_TYPE_STRING: // field that represents string cell type
-						System.out.print(cell.getStringCellValue() + "\t\t\t");
-						break;
-					case Cell.CELL_TYPE_NUMERIC: // field that represents number cell type
-						System.out.print(cell.getNumericCellValue() + "\t\t\t");
+					case Cell.CELL_TYPE_STRING:
+						
+						if (index == 0)
+						{
+							columnNames.add(cell.getStringCellValue());
+						}
+						else {
+							column_value_map.put(columnNames.get(cell_index), cell.getStringCellValue());
+						}
+					//	System.out.print(cell.getStringCellValue() + "\t\t\t");
 						break;
 					default:
 					}
+					
+					cell_index = cell_index + 1;
+					
 				}
-				System.out.println("hjgcv");
+				if (index > 0)
+				{
+					myMap.add(column_value_map);
+					
+					ht1.put(index -1, myMap);
+				}
+				index = index + 1;
+				
 			}
+			System.out.println(ht1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
